@@ -76,4 +76,18 @@ resource webConfig 'Microsoft.Web/sites/config@2021-01-15' = {
   }
 }
 
+resource logConfig 'Microsoft.Web/sites/config@2021-01-15' = {
+  name: '${web.name}/logs'
+  dependsOn: [
+    web
+  ]
+  properties: {
+    applicationLogs: {
+      filesystem: {
+        level: 'Info'
+      }
+    }
+  }
+}
+
 output identity object = web.identity
