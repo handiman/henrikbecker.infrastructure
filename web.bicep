@@ -11,10 +11,10 @@ param dockerRegistryUrl string
 @secure()
 param dockerImage string
 
-param prefix string = resourceGroup().name
+param resourcePrefix string = resourceGroup().name
 
 resource web 'Microsoft.Web/sites@2018-11-01' = {
-  name: prefix
+  name: resourcePrefix
   location: resourceGroup().location
   kind: 'app,linux,container'
   identity: {

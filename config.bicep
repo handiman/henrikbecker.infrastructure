@@ -1,7 +1,7 @@
-param prefix string = resourceGroup().name
+param resourcePrefix string = resourceGroup().name
 
 resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
-  name: '${prefix}-config'
+  name: '${resourcePrefix}-config'
   location: resourceGroup().location
   sku: {
     name: 'free'

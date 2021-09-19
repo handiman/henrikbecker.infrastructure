@@ -5,10 +5,10 @@ param storageConnectionString string
 param serverFarmId string 
 @secure()
 param appConfigConnectionString string
-param prefix string = resourceGroup().name
+param resourcePrefix string = resourceGroup().name
 
 resource api 'Microsoft.Web/sites@2020-12-01' = {
-  name: '${prefix}api'
+  name: '${resourcePrefix}api'
   location: resourceGroup().location
   kind: 'functionapp'
   identity: {
@@ -38,7 +38,7 @@ resource api 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'WEBSITE_CONTENTSHARE'
-          value: toLower('${prefix}api')
+          value: toLower('${resourcePrefix}api')
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
@@ -58,7 +58,7 @@ resource api 'Microsoft.Web/sites@2020-12-01' = {
 }
 
 resource apiConfig 'Microsoft.Web/sites/config@2021-01-15' = {
-  name: '${prefix}api/web'
+  name: '${resourcePrefix}api/web'
   dependsOn: [
     api
   ]

@@ -1,8 +1,8 @@
-param prefix string = resourceGroup().name
+param resourcePrefix string = resourceGroup().name
 var location = resourceGroup().location
 
 resource consumptionPlan 'Microsoft.Web/serverfarms@2021-01-15' = {
-  name: '${prefix}-consumption'
+  name: '${resourcePrefix}-consumption'
   location: resourceGroup().location
   sku: {
     name: 'Y1'
@@ -14,7 +14,7 @@ resource consumptionPlan 'Microsoft.Web/serverfarms@2021-01-15' = {
 }
 
 resource freePlan 'Microsoft.Web/serverfarms@2021-01-15' =  {
-  name: '${prefix}-free'
+  name: '${resourcePrefix}-free'
   location: location
   sku: {
     name: 'F1'
@@ -23,7 +23,7 @@ resource freePlan 'Microsoft.Web/serverfarms@2021-01-15' =  {
 }
 
 resource linuxPlan 'Microsoft.Web/serverfarms@2021-01-15' = {
-  name: '${prefix}-linux'
+  name: '${resourcePrefix}-linux'
   location: location
   kind: 'linux'
   sku: {

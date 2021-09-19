@@ -1,28 +1,30 @@
-@secure()
 param ownerId string
-@secure()
 param publisherEmail string
 param publisherName string
-param prefix string = resourceGroup().name
+param resourcePrefix string = resourceGroup().name
 
-var vaultName = '${prefix}-vault'
+var vaultName = '${resourcePrefix}-vault'
 var vaultUri = 'https://${vaultName}${environment().suffixes.keyvaultDns}/' 
+var location = resourceGroup().location
+
+module backendVnet 'vnet.bicep' = {
+  name: '${resourcePrefix}-backend-vnet'
+}
 
 module config 'config.bicep' = {
-  name: '${prefix}-config'
+  name: '${resourcePrefix}-config'
 }
 
 module storage 'storage.bicep' =  {
-  name: '${prefix}-storage'
-  scope: resourceGroup()
+  name: '${resourcePrefix}-storage'
 }
 
 module plans 'app-plans.bicep' = {
-  name: '${prefix}-plans'
+  name: '${resourcePrefix}-plans'
 }
 
 module apim 'apim.bicep' = {
-  name: '${prefix}-apim'
+  name: '${resourcePrefix}-apim'
   params: {
     publisherName: publisherName
     publisherEmail: publisherEmail
@@ -30,7 +32,7 @@ module apim 'apim.bicep' = {
 }
 
 module web 'web.bicep' = {
-  name: '${prefix}-web'
+  name: '${resourcePrefix}-web'
   dependsOn: [
     storage
     config
@@ -48,7 +50,7 @@ module web 'web.bicep' = {
 }
 
 module jobs 'jobs.bicep' = {
-  name: '${prefix}-jobs' 
+  name: '${resourcePrefix}-jobs' 
   dependsOn: [
     storage
     config
@@ -63,7 +65,7 @@ module jobs 'jobs.bicep' = {
 }
 
 module api 'api.bicep' = {
-  name: '${prefix}-api'
+  name: '${resourcePrefix}-api'
   dependsOn: [
     storage
     config
@@ -78,7 +80,10 @@ module api 'api.bicep' = {
 
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
   name: vaultName
-  location: resourceGroup().location
+  location: location
+  dependsOn: [
+    backendVnet
+  ]
   properties: {
     enabledForDeployment: true
     enabledForTemplateDeployment: true
@@ -88,6 +93,12 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
     sku: {
       name: 'standard'
       family: 'A'
+    }
+    networkAcls: {
+      bypass: 'AzureServices'
+      defaultAction: 'Deny'
+      ipRules: []
+      virtualNetworkRules: []
     }
     accessPolicies: []
   }

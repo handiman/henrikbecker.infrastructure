@@ -1,4 +1,3 @@
-@secure()
 param publisherEmail string
 param publisherName string
 
