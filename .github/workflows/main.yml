@@ -33,7 +33,7 @@ jobs:
       - name: Deploy Infrastructure
         uses: Azure/cli@v1
         with: 
-          inlineScript: az deployment sub create --location '${{ secrets.LOCATION }}' --template-file $GITHUB_WORKSPACE/main.bicep --name '${{ secrets.PREFIX }}-infrastructure' --parameters prefix='${{ secrets.PREFIX }}' publisherName='${{ secrets.COMPANY }}' publisherEmail='${{ secrets.EMAIL }}' ownerId='${{ secrets.OWNER_ID }}'
+          inlineScript: az deployment sub create --location '${{ secrets.LOCATION }}' --template-file $GITHUB_WORKSPACE/main.bicep --name '${{ secrets.PREFIX }}-infrastructure' --parameters resourcePrefix='${{ secrets.PREFIX }}' publisherName='${{ secrets.COMPANY }}' publisherEmail='${{ secrets.EMAIL }}' ownerId='${{ secrets.OWNER_ID }}'
 
       - name: Logout of Azure
         uses: Azure/cli@v1
