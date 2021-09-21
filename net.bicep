@@ -15,22 +15,6 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
 resource dnsZone 'Microsoft.Network/dnsZones@2018-05-01' = {
   name: zoneName
   location: 'global'
-  dependsOn: [
-    publicIp
-  ]
-}
-
-resource aRecords 'Microsoft.Network/dnsZones/A@2018-05-01' = {
-  name: '${zoneName}/@'
-  dependsOn: [
-    dnsZone
-  ]
-  properties: {
-    TTL: 3600
-    targetResource: {
-      id: publicIp.id
-    }
-  }
 }
  
 resource wwwCname 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
