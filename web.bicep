@@ -10,6 +10,7 @@ param dockerPassword string
 param dockerRegistryUrl string
 @secure()
 param dockerImage string
+param vaultUri string
 
 param resourcePrefix string = resourceGroup().name
 
@@ -49,6 +50,10 @@ resource web 'Microsoft.Web/sites@2018-11-01' = {
         {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
           value: 'false'
+        }
+        {
+          name: 'VaultUri'
+          value: vaultUri
         }
       ]
       connectionStrings: [

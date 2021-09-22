@@ -6,6 +6,7 @@ param serverFarmId string
 @secure()
 param appConfigConnectionString string
 param resourcePrefix string = resourceGroup().name
+param vaultUri string
 
 resource api 'Microsoft.Web/sites@2020-12-01' = {
   name: '${resourcePrefix}api'
@@ -51,6 +52,10 @@ resource api 'Microsoft.Web/sites@2020-12-01' = {
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet'
+        }
+        {
+          name: 'VaultUri'
+          value: vaultUri
         }
       ]
     }
