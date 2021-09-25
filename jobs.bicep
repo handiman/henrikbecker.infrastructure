@@ -20,14 +20,6 @@ resource jobs 'Microsoft.Web/sites@2020-12-01' = {
     httpsOnly: true
     clientCertMode: 'Optional'
     siteConfig: {
-      ipSecurityRestrictions: [
-        {
-          action: 'Deny'
-          priority: 1
-          description: 'Deny All'
-          ipAddress: '0.0.0.0/0'
-        }
-      ]
       connectionStrings: [
         {
           name: 'AppConfig'
