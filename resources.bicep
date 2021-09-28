@@ -43,6 +43,7 @@ module web 'web.bicep' = {
     serverFarmId: plans.outputs.linuxPlan.id
     vaultUri: vaultUri
     appConfigConnectionString: config.outputs.connectionString
+    storageConnectionString: storage.outputs.connectionString
     dockerUserName: keyVault.getSecret('docker--username')
     dockerPassword: keyVault.getSecret('docker--password')
     dockerRegistryUrl: keyVault.getSecret('docker--registryUrl')

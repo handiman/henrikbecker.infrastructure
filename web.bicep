@@ -2,6 +2,8 @@
 param serverFarmId string 
 @secure()
 param appConfigConnectionString string
+@secure() 
+param storageConnectionString string
 @secure()
 param dockerUserName string
 @secure()
@@ -60,6 +62,11 @@ resource web 'Microsoft.Web/sites@2018-11-01' = {
         {
           name: 'AppConfig'
           connectionString: appConfigConnectionString
+          type: 'Custom'
+        }
+        {
+          name: 'Storage'
+          connectionString: storageConnectionString
           type: 'Custom'
         }
       ]
