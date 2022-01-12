@@ -3,8 +3,6 @@ param vaultUri string
 @secure()
 param storageConnectionString string
 @secure()
-param eventhubConnectionString string
-@secure()
 param serverFarmId string 
 @secure()
 param appConfigConnectionString string
@@ -27,10 +25,6 @@ resource jobs 'Microsoft.Web/sites@2020-12-01' = {
           name: 'AppConfig'
           connectionString: appConfigConnectionString
         }
-        {
-          name: 'EventHub'
-          connectionString: eventhubConnectionString
-        }
       ]
       appSettings: [
         {
@@ -44,10 +38,6 @@ resource jobs 'Microsoft.Web/sites@2020-12-01' = {
         {
           name: 'AzureWebJobsStorage'
           value: storageConnectionString
-        }
-        {
-          name: 'EventHubConnectionString'
-          value: eventhubConnectionString
         }
         {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'

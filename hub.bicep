@@ -22,5 +22,3 @@ resource eventhub 'Microsoft.EventHub/namespaces/eventhubs@2021-11-01' = {
     status: 'Active'
   }
 }
-
-output connectionString string = 'Endpoint=sb://${eventhubNamespace.name}.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=${eventhubNamespace.listKeys().keys[0].value}'

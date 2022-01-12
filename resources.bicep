@@ -48,7 +48,6 @@ module web 'web.bicep' = {
     vaultUri: vaultUri
     appConfigConnectionString: config.outputs.connectionString
     storageConnectionString: storage.outputs.connectionString
-    eventhubConnectionString: eventhub.outputs.connectionString
     dockerUserName: keyVault.getSecret('docker--username')
     dockerPassword: keyVault.getSecret('docker--password')
     dockerRegistryUrl: keyVault.getSecret('docker--registryUrl')
@@ -67,7 +66,6 @@ module jobs 'jobs.bicep' = {
     vaultUri: vaultUri
     serverFarmId: plans.outputs.consumptionPlan.id
     storageConnectionString: storage.outputs.connectionString
-    eventhubConnectionString: eventhub.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
   }
 }
@@ -82,7 +80,6 @@ module api 'api.bicep' = {
   params: {
     serverFarmId: plans.outputs.consumptionPlan.id
     storageConnectionString: storage.outputs.connectionString
-    eventhubConnectionString: eventhub.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
     vaultUri: vaultUri
   }

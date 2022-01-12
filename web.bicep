@@ -5,8 +5,6 @@ param appConfigConnectionString string
 @secure() 
 param storageConnectionString string
 @secure()
-param eventhubConnectionString string
-@secure()
 param dockerUserName string
 @secure()
 param dockerPassword string
@@ -70,10 +68,6 @@ resource web 'Microsoft.Web/sites@2018-11-01' = {
           name: 'Storage'
           connectionString: storageConnectionString
           type: 'Custom'
-        }
-        {
-          name: 'EventHub'
-          connectionString: eventhubConnectionString
         }
       ]
       defaultDocuments: [
