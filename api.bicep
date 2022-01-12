@@ -2,6 +2,8 @@
 @secure()
 param storageConnectionString string
 @secure()
+param eventhubConnectionString string
+@secure()
 param serverFarmId string 
 @secure()
 param appConfigConnectionString string
@@ -22,6 +24,10 @@ resource api 'Microsoft.Web/sites@2020-12-01' = {
         {
           name: 'AppConfig'
           connectionString: appConfigConnectionString
+        }
+        {
+          name: 'EventHub'
+          connectionString: eventhubConnectionString
         }
       ]
       appSettings: [
