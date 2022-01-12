@@ -46,6 +46,10 @@ resource jobs 'Microsoft.Web/sites@2020-12-01' = {
           value: storageConnectionString
         }
         {
+          name: 'EventHubConnectionString'
+          value: eventhubConnectionString
+        }
+        {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
           value: storageConnectionString
         }
