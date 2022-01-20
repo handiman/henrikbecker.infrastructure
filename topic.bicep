@@ -8,6 +8,6 @@ resource topic 'Microsoft.EventGrid/topics@2021-12-01' = {
     type: 'SystemAssigned'
   }
   properties: {
-    inputSchema: 'CustomEventSchema'
+    inputSchema: 'EventGridSchema'
   }
 }
