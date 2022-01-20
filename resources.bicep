@@ -7,6 +7,10 @@ var vaultName = '${resourcePrefix}-vault'
 var vaultUri = 'https://${vaultName}${environment().suffixes.keyvaultDns}/' 
 var location = resourceGroup().location
 
+module topic 'topic.bicep' = {
+  name: '${resourcePrefix}-eventgrid-topic'
+}
+
 module backendVnet 'vnet.bicep' = {
   name: '${resourcePrefix}-backend-vnet'
 }
