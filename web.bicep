@@ -1,6 +1,4 @@
 @secure()
-param serverFarmId string 
-@secure()
 param appConfigConnectionString string
 @secure() 
 param storageConnectionString string
@@ -16,6 +14,18 @@ param vaultUri string
 
 param resourcePrefix string = resourceGroup().name
 
+resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {
+  name: '${resourcePrefix}-linux'
+  location: resourceGroup().location
+  kind: 'linux'
+  sku: {
+    name: 'B1'
+  }
+  properties: {
+    reserved: true
+  }
+}
+
 resource web 'Microsoft.Web/sites@2018-11-01' = {
   name: resourcePrefix
   location: resourceGroup().location
@@ -24,7 +34,7 @@ resource web 'Microsoft.Web/sites@2018-11-01' = {
     type: 'SystemAssigned'
   }
   properties: {
-    serverFarmId: serverFarmId
+    serverFarmId: plan.id
     httpsOnly: true
     clientAffinityEnabled: false
     siteConfig: {
@@ -80,9 +90,6 @@ resource web 'Microsoft.Web/sites@2018-11-01' = {
 
 resource webConfig 'Microsoft.Web/sites/config@2021-01-15' = {
   name: '${web.name}/web'
-  dependsOn: [
-    web
-  ]
   properties: {
     healthCheckPath: '/health'
   }

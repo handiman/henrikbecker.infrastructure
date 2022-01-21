@@ -23,10 +23,6 @@ module storage 'storage.bicep' =  {
   name: '${resourcePrefix}-storage'
 }
 
-module plans 'app-plans.bicep' = {
-  name: '${resourcePrefix}-plans'
-}
-
 module apim 'apim.bicep' = {
   name: '${resourcePrefix}-apim'
   params: {
@@ -40,10 +36,8 @@ module web 'web.bicep' = {
   dependsOn: [
     storage
     config
-    plans
   ]
   params: {
-    serverFarmId: plans.outputs.linuxPlan.id
     vaultUri: vaultUri
     appConfigConnectionString: config.outputs.connectionString
     storageConnectionString: storage.outputs.connectionString
@@ -59,10 +53,8 @@ module mail 'mail-function.bicep' = {
   dependsOn: [
     storage
     config
-    plans
   ]
   params: {
-    serverFarmId: plans.outputs.consumptionPlan.id
     storageConnectionString: storage.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
     vaultUri: vaultUri
@@ -74,10 +66,8 @@ module economy 'economy-function.bicep' = {
   dependsOn: [
     storage
     config
-    plans
   ]
   params: {
-    serverFarmId: plans.outputs.consumptionPlan.id
     storageConnectionString: storage.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
     vaultUri: vaultUri

@@ -2,11 +2,20 @@ param resourcePrefix string = resourceGroup().name
 @secure()
 param storageConnectionString string
 @secure()
-param serverFarmId string 
-@secure()
 param appConfigConnectionString string
 param vaultUri string
 
+resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {
+  name: '${resourcePrefix}-mail-plan'
+  location: resourceGroup().location
+  sku: {
+    name: 'Y1'
+    tier: 'Dynamic'
+    size: 'Y1'
+    family: 'Y'
+    capacity: 0
+  }
+}
 
 resource mailFunction 'Microsoft.Web/sites@2021-02-01' = {
   name: '${resourcePrefix}-mail'
@@ -16,7 +25,7 @@ resource mailFunction 'Microsoft.Web/sites@2021-02-01' = {
     type: 'SystemAssigned'
   }
   properties: {
-    serverFarmId: serverFarmId
+    serverFarmId: plan.id
     siteConfig: {
       connectionStrings: [
         {
