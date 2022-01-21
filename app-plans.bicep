@@ -13,15 +13,6 @@ resource consumptionPlan 'Microsoft.Web/serverfarms@2021-01-15' = {
   }
 }
 
-resource freePlan 'Microsoft.Web/serverfarms@2021-01-15' =  {
-  name: '${resourcePrefix}-free'
-  location: location
-  sku: {
-    name: 'F1'
-    capacity: 1
-  }
-}
-
 resource linuxPlan 'Microsoft.Web/serverfarms@2021-01-15' = {
   name: '${resourcePrefix}-linux'
   location: location
@@ -37,10 +28,6 @@ resource linuxPlan 'Microsoft.Web/serverfarms@2021-01-15' = {
 output consumptionPlan object = {
   id: consumptionPlan.id
   name: consumptionPlan.name
-}
-output freePlan object = {
-  id: freePlan.id
-  name: freePlan.name
 }
 output linuxPlan object = {
   id: linuxPlan.id
