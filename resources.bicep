@@ -159,6 +159,33 @@ resource vaultPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-prev
       }
       {
         tenantId: subscription().tenantId
+        objectId: mail.outputs.identity.principalId
+        permissions: {
+          keys: [
+            'get'
+          ]
+          secrets: [
+            'list'
+            'get'
+          ]
+        }
+      }
+      
+      {
+        tenantId: subscription().tenantId
+        objectId: economy.outputs.identity.principalId
+        permissions: {
+          keys: [
+            'get'
+          ]
+          secrets: [
+            'list'
+            'get'
+          ]
+        }
+      }
+      {
+        tenantId: subscription().tenantId
         objectId: web.outputs.identity.principalId
         permissions: {
           keys: [
