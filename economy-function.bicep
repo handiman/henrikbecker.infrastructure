@@ -44,7 +44,7 @@ resource economyFunction 'Microsoft.Web/sites@2021-02-01' = {
         }
         {
           name: 'WEBSITE_CONTENTSHARE'
-          value: toLower('${resourcePrefix}-mail')
+          value: toLower('${resourcePrefix}-economy')
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
