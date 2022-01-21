@@ -59,10 +59,7 @@ resource economyFunction 'Microsoft.Web/sites@2021-02-01' = {
 
 
 resource mailFunctionConfig 'Microsoft.Web/sites/config@2021-02-01' = {
-  name: '${resourcePrefix}api/web'
-  dependsOn: [
-    economyFunction
-  ]
+  name: '${economyFunction.name}/web'
   properties: {
     ftpsState: 'Disabled'
   }

@@ -7,6 +7,7 @@ param serverFarmId string
 param appConfigConnectionString string
 param vaultUri string
 
+
 resource mailFunction 'Microsoft.Web/sites@2021-02-01' = {
   name: '${resourcePrefix}-mail'
   location: resourceGroup().location
@@ -59,10 +60,7 @@ resource mailFunction 'Microsoft.Web/sites@2021-02-01' = {
 
 
 resource mailFunctionConfig 'Microsoft.Web/sites/config@2021-02-01' = {
-  name: '${resourcePrefix}api/web'
-  dependsOn: [
-    mailFunction
-  ]
+  name: '${mailFunction.name}/web'
   properties: {
     ftpsState: 'Disabled'
   }
