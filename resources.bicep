@@ -41,7 +41,6 @@ module web 'web.bicep' = {
     storage
     config
     plans
-    keyVault
   ]
   params: {
     serverFarmId: plans.outputs.linuxPlan.id
@@ -52,36 +51,6 @@ module web 'web.bicep' = {
     dockerPassword: keyVault.getSecret('docker--password')
     dockerRegistryUrl: keyVault.getSecret('docker--registryUrl')
     dockerImage: keyVault.getSecret('docker--image--web')
-  }
-}
-
-module jobs 'jobs.bicep' = {
-  name: '${resourcePrefix}-jobs' 
-  dependsOn: [
-    storage
-    config
-    plans
-  ]
-  params: {
-    vaultUri: vaultUri
-    serverFarmId: plans.outputs.consumptionPlan.id
-    storageConnectionString: storage.outputs.connectionString
-    appConfigConnectionString: config.outputs.connectionString
-  }
-}
-
-module api 'api.bicep' = {
-  name: '${resourcePrefix}-api'
-  dependsOn: [
-    storage
-    config
-    plans
-  ]
-  params: {
-    serverFarmId: plans.outputs.consumptionPlan.id
-    storageConnectionString: storage.outputs.connectionString
-    appConfigConnectionString: config.outputs.connectionString
-    vaultUri: vaultUri
   }
 }
 
@@ -138,32 +107,17 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
 resource vaultPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
   name: '${vaultName}/add'
   dependsOn: [
-    jobs
     web
+    mail
+    economy
     keyVault
   ]
   properties: {
     accessPolicies: [
       {
         tenantId: subscription().tenantId
-        objectId: jobs.outputs.identity.principalId
-        permissions: {
-          keys: [
-            'get'
-          ]
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-      }
-      {
-        tenantId: subscription().tenantId
         objectId: mail.outputs.identity.principalId
         permissions: {
-          keys: [
-            'get'
-          ]
           secrets: [
             'list'
             'get'
@@ -175,9 +129,6 @@ resource vaultPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-prev
         tenantId: subscription().tenantId
         objectId: economy.outputs.identity.principalId
         permissions: {
-          keys: [
-            'get'
-          ]
           secrets: [
             'list'
             'get'
