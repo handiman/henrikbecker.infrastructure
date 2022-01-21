@@ -19,9 +19,6 @@ module net 'net.bicep' = {
 module resources 'resources.bicep' = {
   name: '${rg.name}-resources'
   scope: rg
-  dependsOn: [
-    rg
-  ]
   params: {
     ownerId: ownerId
     resourcePrefix: resourcePrefix

@@ -85,6 +85,21 @@ module api 'api.bicep' = {
   }
 }
 
+module mail 'mail-function.bicep' = {
+  name: '${resourcePrefix}-mail'
+  dependsOn: [
+    storage
+    config
+    plans
+  ]
+  params: {
+    serverFarmId: plans.outputs.consumptionPlan.id
+    storageConnectionString: storage.outputs.connectionString
+    appConfigConnectionString: config.outputs.connectionString
+    vaultUri: vaultUri
+  }
+}
+
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
   name: vaultName
   location: location

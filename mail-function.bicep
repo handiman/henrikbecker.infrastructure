@@ -1,15 +1,14 @@
-
+param resourcePrefix string = resourceGroup().name
 @secure()
 param storageConnectionString string
 @secure()
 param serverFarmId string 
 @secure()
 param appConfigConnectionString string
-param resourcePrefix string = resourceGroup().name
 param vaultUri string
 
-resource api 'Microsoft.Web/sites@2020-12-01' = {
-  name: '${resourcePrefix}api'
+resource mailFunction 'Microsoft.Web/sites@2021-02-01' = {
+  name: '${resourcePrefix}-mail'
   location: resourceGroup().location
   kind: 'functionapp'
   identity: {
@@ -26,10 +25,6 @@ resource api 'Microsoft.Web/sites@2020-12-01' = {
       ]
       appSettings: [
         {
-          name: 'AzureWebJobsDashboard'
-          value: storageConnectionString
-        }
-        {
           name: 'AzureWebJobsStorage'
           value: storageConnectionString
         }
@@ -39,11 +34,11 @@ resource api 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'WEBSITE_CONTENTSHARE'
-          value: toLower('${resourcePrefix}api')
+          value: toLower('${resourcePrefix}-mail')
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~3'
+          value: '~4'
         }
         {
           name: 'WEBSITE_RUN_FROM_PACKAGE'
@@ -62,14 +57,15 @@ resource api 'Microsoft.Web/sites@2020-12-01' = {
   }
 }
 
-resource apiConfig 'Microsoft.Web/sites/config@2021-01-15' = {
+
+resource mailFunctionConfig 'Microsoft.Web/sites/config@2021-02-01' = {
   name: '${resourcePrefix}api/web'
   dependsOn: [
-    api
+    mailFunction
   ]
   properties: {
     ftpsState: 'Disabled'
   }
 }
 
-output identity object = api.identity
+output identity object = mailFunction.identity
