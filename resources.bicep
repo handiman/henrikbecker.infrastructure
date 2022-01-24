@@ -23,14 +23,6 @@ module storage 'storage.bicep' =  {
   name: '${resourcePrefix}-storage'
 }
 
-module apim 'apim.bicep' = {
-  name: '${resourcePrefix}-apim'
-  params: {
-    publisherName: publisherName
-    publisherEmail: publisherEmail
-  }
-}
-
 module web 'web.bicep' = {
   name: '${resourcePrefix}-web'
   dependsOn: [
@@ -71,6 +63,24 @@ module economy 'economy-function.bicep' = {
     storageConnectionString: storage.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
     vaultUri: vaultUri
+  }
+}
+
+module music 'music-function.bicep' = {
+  name: '${resourcePrefix}-music'
+  dependsOn: [
+    storage
+  ]
+  params: {
+    storageConnectionString: storage.outputs.connectionString
+  }
+}
+
+module apim 'apim.bicep' = {
+  name: '${resourcePrefix}-apim'
+  params: {
+    publisherName: publisherName
+    publisherEmail: publisherEmail
   }
 }
 
