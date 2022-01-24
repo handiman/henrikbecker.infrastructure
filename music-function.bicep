@@ -6,7 +6,7 @@ param location string = resourceGroup().location
 var functionName = '${resourcePrefix}-music'
 
 resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {
-  name: '${functionName}l-plan'
+  name: '${functionName}-plan'
   location: resourceGroup().location
   sku: {
     name: 'Y1'
