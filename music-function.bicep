@@ -30,7 +30,6 @@ resource insights 'Microsoft.Insights/components@2020-02-02' = {
   kind: 'web' 
   properties: {
     Application_Type: 'web'
-    RetentionInDays: 14
     IngestionMode: 'LogAnalytics'
     WorkspaceResourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.OperationalInsights/workspaces/${workspace.name}'
   }
