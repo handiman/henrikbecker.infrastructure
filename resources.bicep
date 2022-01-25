@@ -1,6 +1,7 @@
 param ownerId string
 param publisherEmail string
 param publisherName string
+param acmeBotFunctionAppName string
 param resourcePrefix string = resourceGroup().name
 
 var vaultName = '${resourcePrefix}-vault'
@@ -95,6 +96,10 @@ module apim 'apim.bicep' = {
   }
 }
 
+resource acmeBot 'Microsoft.Web/sites@2021-02-01' existing = {
+  name: acmeBotFunctionAppName
+}
+
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
   name: vaultName
   location: location
@@ -125,6 +130,29 @@ resource vaultPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-prev
   ]
   properties: {
     accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: acmeBot.identity.principalId
+        permissions: {
+          certificates: [
+            'backup'
+            'create'
+            'delete'
+            'deleteissuers'
+            'get'
+            'getissuers'
+            'import'
+            'list'
+            'listissuers'
+            'managecontacts'
+            'manageissuers'
+            'recover'
+            'restore'
+            'setissuers'
+            'update'
+          ]
+        }
+      }
       {
         tenantId: subscription().tenantId
         objectId: mail.outputs.identity.principalId

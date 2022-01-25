@@ -2,6 +2,7 @@ targetScope = 'subscription'
 
 param resourcePrefix string
 param ownerId string
+param acmeBot string
 param publisherEmail string
 param publisherName string  = 'Henrik Becker Consulting AB'
 param location string = deployment().location
@@ -24,5 +25,6 @@ module resources 'resources.bicep' = {
     resourcePrefix: resourcePrefix
     publisherName: publisherName
     publisherEmail: publisherEmail
+    acmeBotFunctionAppName: acmeBot
   }
 }
