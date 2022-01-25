@@ -31,6 +31,7 @@ resource mailFunction 'Microsoft.Web/sites@2021-02-01' = {
         {
           name: 'AppConfig'
           connectionString: appConfigConnectionString
+          type: 'Custom'
         }
       ]
       appSettings: [
