@@ -36,6 +36,7 @@ module web 'web.bicep' = {
   ]
   params: {
     vaultUri: vaultUri
+    workspaceName: workspace.name
     appConfigConnectionString: config.outputs.connectionString
     storageConnectionString: storage.outputs.connectionString
     dockerUserName: keyVault.getSecret('docker--username')
@@ -55,6 +56,7 @@ module mail 'mail-function.bicep' = {
     storageConnectionString: storage.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
     vaultUri: vaultUri
+    workspaceName: workspace.name
   }
 }
 
@@ -68,6 +70,7 @@ module economy 'economy-function.bicep' = {
     storageConnectionString: storage.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
     vaultUri: vaultUri
+    workspaceName: workspace.name
   }
 }
 

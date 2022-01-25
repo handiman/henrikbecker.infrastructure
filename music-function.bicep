@@ -8,18 +8,6 @@ param location string = resourceGroup().location
 param workspaceName string
 var functionName = '${resourcePrefix}-music'
 
-resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {
-  name: '${functionName}-plan'
-  location: resourceGroup().location
-  sku: {
-    name: 'Y1'
-    tier: 'Dynamic'
-    size: 'Y1'
-    family: 'Y'
-    capacity: 0
-  }
-}
-
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
   name: workspaceName
 }
@@ -32,6 +20,18 @@ resource insights 'Microsoft.Insights/components@2020-02-02' = {
     Application_Type: 'web'
     IngestionMode: 'LogAnalytics'
     WorkspaceResourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.OperationalInsights/workspaces/${workspace.name}'
+  }
+}
+
+resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {
+  name: '${functionName}-plan'
+  location: resourceGroup().location
+  sku: {
+    name: 'Y1'
+    tier: 'Dynamic'
+    size: 'Y1'
+    family: 'Y'
+    capacity: 0
   }
 }
 

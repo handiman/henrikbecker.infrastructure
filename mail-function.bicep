@@ -1,13 +1,31 @@
 param resourcePrefix string = resourceGroup().name
+param location string = resourceGroup().location
 @secure()
 param storageConnectionString string
 @secure()
 param appConfigConnectionString string
 param vaultUri string
+param workspaceName string
+var functionName = '${resourcePrefix}-mail'
+
+resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
+  name: workspaceName
+}
+
+resource insights 'Microsoft.Insights/components@2020-02-02-preview' = {
+  name: '${functionName}-ai'
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    IngestionMode: 'LogAnalytics'
+    WorkspaceResourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.OperationalInsights/workspaces/${workspace.name}'
+  }
+}
 
 resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {
-  name: '${resourcePrefix}-mail-plan'
-  location: resourceGroup().location
+  name: '${functionName}-plan'
+  location: location
   sku: {
     name: 'Y1'
     tier: 'Dynamic'
@@ -17,9 +35,9 @@ resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {
   }
 }
 
-resource mailFunction 'Microsoft.Web/sites@2021-02-01' = {
-  name: '${resourcePrefix}-mail'
-  location: resourceGroup().location
+resource app 'Microsoft.Web/sites@2021-02-01' = {
+  name: functionName
+  location: location
   kind: 'functionapp'
   identity: {
     type: 'SystemAssigned'
@@ -36,6 +54,14 @@ resource mailFunction 'Microsoft.Web/sites@2021-02-01' = {
       ]
       appSettings: [
         {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: insights.properties.InstrumentationKey
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: insights.properties.ConnectionString
+        }
+        {
           name: 'AzureWebJobsStorage'
           value: storageConnectionString
         }
@@ -45,7 +71,7 @@ resource mailFunction 'Microsoft.Web/sites@2021-02-01' = {
         }
         {
           name: 'WEBSITE_CONTENTSHARE'
-          value: toLower('${resourcePrefix}-mail')
+          value: toLower(functionName)
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
@@ -69,11 +95,11 @@ resource mailFunction 'Microsoft.Web/sites@2021-02-01' = {
 }
 
 
-resource mailFunctionConfig 'Microsoft.Web/sites/config@2021-02-01' = {
-  name: '${mailFunction.name}/web'
+resource config 'Microsoft.Web/sites/config@2021-02-01' = {
+  name: '${app.name}/web'
   properties: {
     ftpsState: 'Disabled'
   }
 }
 
-output identity object = mailFunction.identity
+output identity object = app.identity
