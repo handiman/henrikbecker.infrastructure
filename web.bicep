@@ -11,7 +11,6 @@ param dockerRegistryUrl string
 @secure()
 param dockerImage string
 param vaultUri string
-
 param resourcePrefix string = resourceGroup().name
 
 resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {

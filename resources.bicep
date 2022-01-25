@@ -23,6 +23,11 @@ module storage 'storage.bicep' =  {
   name: '${resourcePrefix}-storage'
 }
 
+resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
+  name: '${resourcePrefix}-workspace'
+  location: location
+}
+
 module web 'web.bicep' = {
   name: '${resourcePrefix}-web'
   dependsOn: [
@@ -75,6 +80,7 @@ module music 'music-function.bicep' = {
     storageConnectionString: storage.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
     vaultUri: vaultUri
+    workspaceName: workspace.name
   }
 }
 

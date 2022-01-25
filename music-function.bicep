@@ -5,7 +5,7 @@ param storageConnectionString string
 param appConfigConnectionString string
 param vaultUri string
 param location string = resourceGroup().location
-
+param workspaceName string
 var functionName = '${resourcePrefix}-music'
 
 resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {
@@ -17,6 +17,22 @@ resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {
     size: 'Y1'
     family: 'Y'
     capacity: 0
+  }
+}
+
+resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
+  name: workspaceName
+}
+
+resource insights 'Microsoft.Insights/components@2020-02-02' = {
+  name: '${functionName}-ai'
+  location: location
+  kind: 'web' 
+  properties: {
+    Application_Type: 'web'
+    RetentionInDays: 14
+    IngestionMode: 'LogAnalytics'
+    WorkspaceResourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.OperationalInsights/workspaces/${workspace.name}'
   }
 }
 
@@ -38,6 +54,14 @@ resource app 'Microsoft.Web/sites@2021-02-01' = {
         }
       ]
       appSettings: [
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: insights.properties.InstrumentationKey
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: insights.properties.ConnectionString
+        }
         {
           name: 'AzureWebJobsStorage'
           value: storageConnectionString
