@@ -73,6 +73,8 @@ module music 'music-function.bicep' = {
   ]
   params: {
     storageConnectionString: storage.outputs.connectionString
+    appConfigConnectionString: config.outputs.connectionString
+    vaultUri: vaultUri
   }
 }
 

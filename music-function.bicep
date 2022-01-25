@@ -1,6 +1,9 @@
 param resourcePrefix string = resourceGroup().name
 @secure()
 param storageConnectionString string
+@secure()
+param appConfigConnectionString string
+param vaultUri string
 param location string = resourceGroup().location
 
 var functionName = '${resourcePrefix}-music'
@@ -27,6 +30,12 @@ resource app 'Microsoft.Web/sites@2021-02-01' = {
   properties: {
     serverFarmId: plan.id
     siteConfig: {
+      connectionStrings: [
+        {
+          name: 'AppConfig'
+          connectionString: appConfigConnectionString
+        }
+      ]
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
@@ -51,6 +60,10 @@ resource app 'Microsoft.Web/sites@2021-02-01' = {
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet'
+        }
+        {
+          name: 'VaultUri'
+          value: vaultUri
         }
       ]
     }
