@@ -204,6 +204,16 @@ resource vaultPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-prev
       }
       {
         tenantId: subscription().tenantId
+        objectId: dada.outputs.identity.principalId
+        permissions: {
+          secrets: [
+            'list'
+            'get'
+          ]
+        }
+      }
+      {
+        tenantId: subscription().tenantId
         objectId: web.outputs.identity.principalId
         permissions: {
           keys: [
