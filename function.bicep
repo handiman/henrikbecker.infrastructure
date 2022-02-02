@@ -1,12 +1,11 @@
-param resourcePrefix string = resourceGroup().name
+param functionName string
+param workspaceName string
+param location string = resourceGroup().location
+param vaultUri string
 @secure()
 param storageConnectionString string
 @secure()
 param appConfigConnectionString string
-param vaultUri string
-param location string = resourceGroup().location
-param workspaceName string
-var functionName = '${resourcePrefix}-music'
 
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
   name: workspaceName
@@ -25,7 +24,7 @@ resource insights 'Microsoft.Insights/components@2020-02-02' = {
 
 resource plan 'Microsoft.Web/serverfarms@2021-01-15' = {
   name: '${functionName}-plan'
-  location: resourceGroup().location
+  location: location
   sku: {
     name: 'Y1'
     tier: 'Dynamic'

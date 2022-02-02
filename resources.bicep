@@ -47,13 +47,14 @@ module web 'web.bicep' = {
   }
 }
 
-module mail 'mail-function.bicep' = {
+module mail 'function.bicep' = {
   name: '${resourcePrefix}-mail'
   dependsOn: [
     storage
     config
   ]
   params: {
+    functionName: '${resourcePrefix}-mail'
     storageConnectionString: storage.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
     vaultUri: vaultUri
@@ -61,13 +62,14 @@ module mail 'mail-function.bicep' = {
   }
 }
 
-module economy 'economy-function.bicep' = {
+module economy 'function.bicep' = {
   name: '${resourcePrefix}-economy'
   dependsOn: [
     storage
     config
   ]
   params: {
+    functionName: '${resourcePrefix}-economy'
     storageConnectionString: storage.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
     vaultUri: vaultUri
@@ -75,12 +77,29 @@ module economy 'economy-function.bicep' = {
   }
 }
 
-module music 'music-function.bicep' = {
+module music 'function.bicep' = {
   name: '${resourcePrefix}-music'
   dependsOn: [
     storage
+    config
   ]
   params: {
+    functionName: '${resourcePrefix}-music'
+    storageConnectionString: storage.outputs.connectionString
+    appConfigConnectionString: config.outputs.connectionString
+    vaultUri: vaultUri
+    workspaceName: workspace.name
+  }
+}
+
+module dada 'function.bicep' = {
+  name: '${resourcePrefix}-dada'
+  dependsOn: [
+    storage
+    config
+  ]
+  params: {
+    functionName: '${resourcePrefix}-dada'
     storageConnectionString: storage.outputs.connectionString
     appConfigConnectionString: config.outputs.connectionString
     vaultUri: vaultUri
