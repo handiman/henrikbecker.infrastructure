@@ -17,5 +17,3 @@ resource apim 'Microsoft.ApiManagement/service@2020-12-01' = {
     publisherName: publisherName
   }
 }
-
-output identity object = apim.identity

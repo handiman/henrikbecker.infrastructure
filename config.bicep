@@ -10,6 +10,3 @@ resource config 'Microsoft.AppConfiguration/configurationStores@2021-03-01-previ
     type: 'SystemAssigned'
   }
 }
-
-output connectionString string = config.listkeys().value[0].connectionString
-output identity object = config.identity
