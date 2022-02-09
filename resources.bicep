@@ -47,66 +47,6 @@ module web 'web.bicep' = {
   }
 }
 
-module mail 'function.bicep' = {
-  name: '${resourcePrefix}-mail'
-  dependsOn: [
-    storage
-    config
-  ]
-  params: {
-    functionName: '${resourcePrefix}-mail'
-    storageConnectionString: storage.outputs.connectionString
-    appConfigConnectionString: config.outputs.connectionString
-    vaultUri: vaultUri
-    workspaceName: workspace.name
-  }
-}
-
-module economy 'function.bicep' = {
-  name: '${resourcePrefix}-economy'
-  dependsOn: [
-    storage
-    config
-  ]
-  params: {
-    functionName: '${resourcePrefix}-economy'
-    storageConnectionString: storage.outputs.connectionString
-    appConfigConnectionString: config.outputs.connectionString
-    vaultUri: vaultUri
-    workspaceName: workspace.name
-  }
-}
-
-module music 'function.bicep' = {
-  name: '${resourcePrefix}-music'
-  dependsOn: [
-    storage
-    config
-  ]
-  params: {
-    functionName: '${resourcePrefix}-music'
-    storageConnectionString: storage.outputs.connectionString
-    appConfigConnectionString: config.outputs.connectionString
-    vaultUri: vaultUri
-    workspaceName: workspace.name
-  }
-}
-
-module dada 'function.bicep' = {
-  name: '${resourcePrefix}-dada'
-  dependsOn: [
-    storage
-    config
-  ]
-  params: {
-    functionName: '${resourcePrefix}-dada'
-    storageConnectionString: storage.outputs.connectionString
-    appConfigConnectionString: config.outputs.connectionString
-    vaultUri: vaultUri
-    workspaceName: workspace.name
-  }
-}
-
 module apim 'apim.bicep' = {
   name: '${resourcePrefix}-apim'
   params: {
@@ -140,12 +80,10 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
 }
 
 resource vaultPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
-  name: '${vaultName}/add'
+  name: 'add'
+  parent: keyVault
   dependsOn: [
     web
-    mail
-    economy
-    keyVault
   ]
   properties: {
     accessPolicies: [
@@ -169,46 +107,6 @@ resource vaultPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-prev
             'restore'
             'setissuers'
             'update'
-          ]
-        }
-      }
-      {
-        tenantId: subscription().tenantId
-        objectId: mail.outputs.identity.principalId
-        permissions: {
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-      }
-      {
-        tenantId: subscription().tenantId
-        objectId: economy.outputs.identity.principalId
-        permissions: {
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-      }
-      {
-        tenantId: subscription().tenantId
-        objectId: music.outputs.identity.principalId
-        permissions: {
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-      }
-      {
-        tenantId: subscription().tenantId
-        objectId: dada.outputs.identity.principalId
-        permissions: {
-          secrets: [
-            'list'
-            'get'
           ]
         }
       }
