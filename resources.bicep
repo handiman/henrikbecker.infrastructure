@@ -6,9 +6,17 @@ param resourcePrefix string = resourceGroup().name
 
 var vaultName = '${resourcePrefix}-vault'
 var location = resourceGroup().location
+var topicName = resourcePrefix
 
-module topic 'topic.bicep' = {
-  name: '${resourcePrefix}-eventgrid-topic'
+resource topic 'Microsoft.EventGrid/topics@2021-12-01' = {
+  name: topicName
+  location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    inputSchema: 'EventGridSchema'
+  }
 }
 
 module backendVnet 'vnet.bicep' = {
@@ -57,6 +65,33 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
       family: 'A'
     }
     accessPolicies: []
+  }
+}
+
+resource azureAdTenantIdSecret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
+  name: 'AzureAd--TenantId'
+  parent: keyVault
+  properties: {
+    value: subscription().tenantId
+    contentType: 'string'
+  }
+}
+
+resource azureAdInstanceSecret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
+  name: 'AzureAd--Instance'
+  parent: keyVault
+  properties: {
+    value: environment().authentication.loginEndpoint
+    contentType: 'uri'
+  }
+}
+
+resource eventGridAccessKeySecret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
+  name: 'EventGridAccessKey'
+  parent: keyVault 
+  properties: {
+    value: topic.listKeys().key1
+    contentType: 'string'
   }
 }
 
