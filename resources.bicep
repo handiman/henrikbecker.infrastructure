@@ -65,6 +65,79 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
       family: 'A'
     }
   }
+  resource vaultPolicies 'accessPolicies' = {
+    name: 'add'
+    properties: {
+      accessPolicies: [
+        {
+          tenantId: subscription().tenantId
+          objectId: acmeBot.identity.principalId
+          permissions: {
+            certificates: [
+              'backup'
+              'create'
+              'delete'
+              'deleteissuers'
+              'get'
+              'getissuers'
+              'import'
+              'list'
+              'listissuers'
+              'managecontacts'
+              'manageissuers'
+              'recover'
+              'restore'
+              'setissuers'
+              'update'
+            ]
+          }
+        }
+        {
+          tenantId: subscription().tenantId
+          objectId: ownerId
+          permissions: {
+            keys: [
+              'get'
+              'list'
+              'update'
+              'create'
+              'import'
+              'delete'
+              'recover'
+              'backup'
+              'restore'
+            ]
+            secrets: [
+              'get'
+              'list'
+              'set'
+              'delete'
+              'recover'
+              'backup'
+              'restore'
+            ]
+            certificates: [
+              'get'
+              'list'
+              'update'
+              'create'
+              'import'
+              'delete'
+              'recover'
+              'backup'
+              'restore'
+              'managecontacts'
+              'manageissuers'
+              'getissuers'
+              'listissuers'
+              'setissuers'
+              'deleteissuers'
+            ]
+          }
+        }
+      ]
+    }
+  }
 }
 
 resource azureAdTenantIdSecret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
@@ -91,80 +164,5 @@ resource eventGridAccessKeySecret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-
   properties: {
     value: topic.listKeys().key1
     contentType: 'string'
-  }
-}
-
-resource vaultPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
-  name: 'add'
-  parent: keyVault
-  properties: {
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: acmeBot.identity.principalId
-        permissions: {
-          certificates: [
-            'backup'
-            'create'
-            'delete'
-            'deleteissuers'
-            'get'
-            'getissuers'
-            'import'
-            'list'
-            'listissuers'
-            'managecontacts'
-            'manageissuers'
-            'recover'
-            'restore'
-            'setissuers'
-            'update'
-          ]
-        }
-      }
-      {
-        tenantId: subscription().tenantId
-        objectId: ownerId
-        permissions: {
-          keys: [
-            'get'
-            'list'
-            'update'
-            'create'
-            'import'
-            'delete'
-            'recover'
-            'backup'
-            'restore'
-          ]
-          secrets: [
-            'get'
-            'list'
-            'set'
-            'delete'
-            'recover'
-            'backup'
-            'restore'
-          ]
-          certificates: [
-            'get'
-            'list'
-            'update'
-            'create'
-            'import'
-            'delete'
-            'recover'
-            'backup'
-            'restore'
-            'managecontacts'
-            'manageissuers'
-            'getissuers'
-            'listissuers'
-            'setissuers'
-            'deleteissuers'
-          ]
-        }
-      }
-    ]
   }
 }
