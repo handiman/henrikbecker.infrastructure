@@ -48,23 +48,8 @@ resource acmeBot 'Microsoft.Web/sites@2021-02-01' existing = {
   name: acmeBotFunctionAppName
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
+resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: vaultName
-  location: location
-  dependsOn: [
-    backendVnet
-  ]
-  properties: {
-    enabledForDeployment: true
-    enabledForTemplateDeployment: true
-    enabledForDiskEncryption: true
-    enableSoftDelete: true
-    tenantId: subscription().tenantId
-    sku: {
-      name: 'standard'
-      family: 'A'
-    }
-  }
   resource vaultPolicies 'accessPolicies' = {
     name: 'add'
     properties: {
