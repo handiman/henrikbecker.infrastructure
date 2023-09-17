@@ -19,6 +19,10 @@ resource topic 'Microsoft.EventGrid/topics@2021-12-01' = {
   }
 }
 
+module containerRegistry 'registry.bicep' = {
+  name: '${resourcePrefix}-registry'
+}
+
 module backendVnet 'vnet.bicep' = {
   name: '${resourcePrefix}-backend-vnet'
 }
