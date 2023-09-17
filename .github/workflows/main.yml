@@ -41,7 +41,7 @@ jobs:
       - name: Deploy Infrastructure
         uses: azure/cli@v1
         with: 
-          inlineScript: az deployment sub create --location '${{ secrets.LOCATION }}' --template-file $GITHUB_WORKSPACE/main.bicep --name '${{ secrets.PREFIX }}-infrastructure' --parameters resourcePrefix='${{ secrets.PREFIX }}' publisherName='${{ secrets.COMPANY }}' publisherEmail='${{ secrets.EMAIL }}' ownerId='${{ secrets.OWNER_ID }}' acmeBot='${{ secrets.ACMEBOT_FUNCTION_NAME }}'
+          inlineScript: az deployment sub create --location '${{ secrets.LOCATION }}' --template-file $GITHUB_WORKSPACE/main.bicep --name '${{ secrets.PREFIX }}-infrastructure' --parameters githubAppId='${{ secrets.AZURE_GITHUB_ACTIONS_APP_ID }}' --parameters resourcePrefix='${{ secrets.PREFIX }}' publisherName='${{ secrets.COMPANY }}' publisherEmail='${{ secrets.EMAIL }}' ownerId='${{ secrets.OWNER_ID }}' acmeBot='${{ secrets.ACMEBOT_FUNCTION_NAME }}'
 
       - name: Logout of Azure
         uses: azure/cli@v1

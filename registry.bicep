@@ -1,5 +1,7 @@
 param prefix string = resourceGroup().name
 param location string = resourceGroup().location
+param githubAppId string
+param ownerId string
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-06-01-preview' = {
     name: prefix
@@ -40,43 +42,5 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-06-01-pr
         encryption: {
             status: 'disabled'
         }
-    }
-}
-
-resource containerRegistryAdmin 'Microsoft.ContainerRegistry/registries/scopeMaps@2023-06-01-preview' = {
-    name: 'adminscope'
-    parent: containerRegistry
-    properties: {
-        description: 'Can perform all read, write and delete operations on the registry'
-        actions: [
-            'repositories/${prefix}/metadata/read'
-            'repositories/${prefix}/metadata/write'
-            'repositories/${prefix}/content/read'
-            'repositories/${prefix}/content/write'
-            'repositories/${prefix}/content/delete'
-        ]
-    }
-}
-
-resource containerRegistryPull 'Microsoft.ContainerRegistry/registries/scopeMaps@2023-06-01-preview' = {
-    name: 'pullscope'
-    parent: containerRegistry
-    properties: {
-        description: 'Can pull any repository of the registry'
-        actions: [
-            'repositories/${prefix}/content/read'
-        ]
-    }
-}
-
-resource containerRegistryPush 'Microsoft.ContainerRegistry/registries/scopeMaps@2023-06-01-preview' = {
-    name: 'pushscope'
-    parent: containerRegistry
-    properties: {
-        description: 'Can push to any repository of the registry'
-        actions: [
-            'repositories/${prefix}/content/read'
-            'repositories/${prefix}/content/write'
-        ]
     }
 }

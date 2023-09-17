@@ -3,6 +3,7 @@ param publisherEmail string
 param publisherName string
 param acmeBotFunctionAppName string
 param resourcePrefix string = resourceGroup().name
+param githubAppId string
 
 var vaultName = '${resourcePrefix}-vault'
 var location = resourceGroup().location
@@ -21,6 +22,10 @@ resource topic 'Microsoft.EventGrid/topics@2021-12-01' = {
 
 module containerRegistry 'registry.bicep' = {
   name: '${resourcePrefix}-registry'
+  params: {
+	  githubAppId: githubAppId
+	  ownerId: ownerId
+  }
 }
 
 module backendVnet 'vnet.bicep' = {
