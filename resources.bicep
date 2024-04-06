@@ -1,4 +1,5 @@
 param ownerId string
+param githubAppId string
 param publisherEmail string
 param publisherName string
 param acmeBotFunctionAppName string
@@ -62,9 +63,9 @@ module apim 'apim.bicep' = {
 }
 
 module acmebot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' = {
-  name: 'acmebot'
+  name: acmeBotFunctionAppName
   params: {
-    appNamePrefix: 'acmebot'
+    appNamePrefix: acmeBotFunctionAppName
     mailAddress: 'spam@henrikbecker.se'
     acmeEndpoint: 'https://acme-v02.api.letsencrypt.org/'
     createWithKeyVault: false
