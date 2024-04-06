@@ -63,7 +63,7 @@ module apim 'apim.bicep' = {
 }
 
 module acmebot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' = {
-  name: acmeBotFunctionAppName
+  name: '${resourcePrefix}-${acmeBotFunctionAppName}'
   params: {
     appNamePrefix: acmeBotFunctionAppName
     mailAddress: 'spam@henrikbecker.se'
