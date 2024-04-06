@@ -58,7 +58,6 @@ module apim 'apim.bicep' = {
   params: {
     publisherName: publisherName
     publisherEmail: publisherEmail
-    location: location
   }
 }
 
