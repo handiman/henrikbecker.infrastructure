@@ -62,7 +62,7 @@ module apim 'apim.bicep' = {
   }
 }
 
-module acmebot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' = {
+/*module acmebot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' = {
   name: '${resourcePrefix}-${acmeBotFunctionAppName}'
   params: {
     appNamePrefix: acmeBotFunctionAppName
@@ -71,7 +71,7 @@ module acmebot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' =
     createWithKeyVault: false
     keyVaultBaseUrl: 'https://${vaultName}${environment().suffixes.keyvaultDns}'
   }
-}
+}*/
 
 
 resource acmeBot 'Microsoft.Web/sites@2021-02-01' existing = {
