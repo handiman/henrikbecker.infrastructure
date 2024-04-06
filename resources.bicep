@@ -67,8 +67,7 @@ module acmeBot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' =
     appNamePrefix: acmeBotFunctionAppName
     mailAddress: 'spam@henrikbecker.se'
     acmeEndpoint: 'https://acme-v02.api.letsencrypt.org/'
-    createWithKeyVault: false
-    keyVaultBaseUrl: 'https://${vaultName}${environment().suffixes.keyvaultDns}'
+    createWithKeyVault: true
   }
 }
 
@@ -78,29 +77,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
     name: 'add'
     properties: {
       accessPolicies: [
-        {
-          tenantId: subscription().tenantId
-          objectId: acmeBot.identity.principalId
-          permissions: {
-            certificates: [
-              'backup'
-              'create'
-              'delete'
-              'deleteissuers'
-              'get'
-              'getissuers'
-              'import'
-              'list'
-              'listissuers'
-              'managecontacts'
-              'manageissuers'
-              'recover'
-              'restore'
-              'setissuers'
-              'update'
-            ]
-          }
-        }
         {
           tenantId: subscription().tenantId
           objectId: ownerId
