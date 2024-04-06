@@ -61,46 +61,12 @@ module apim 'apim.bicep' = {
   }
 }
 
-module acmeBot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' = {
-  name: '${resourcePrefix}-${acmeBotFunctionAppName}'
-  params: {
-    appNamePrefix: acmeBotFunctionAppName
-    mailAddress: 'spam@henrikbecker.se'
-    acmeEndpoint: 'https://acme-v02.api.letsencrypt.org/'
-    createWithKeyVault: false
-    keyVaultBaseUrl: 'https://${vaultName}${environment().suffixes.keyvaultDns}'
-  }
-}
-
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: vaultName
   resource vaultPolicies 'accessPolicies' = {
     name: 'add'
     properties: {
       accessPolicies: [
-        {
-          tenantId: subscription().tenantId
-          objectId: acmeBot.outputs.principalId
-          permissions: {
-            certificates: [
-              'backup'
-              'create'
-              'delete'
-              'deleteissuers'
-              'get'
-              'getissuers'
-              'import'
-              'list'
-              'listissuers'
-              'managecontacts'
-              'manageissuers'
-              'recover'
-              'restore'
-              'setissuers'
-              'update'
-            ]
-          }
-        }
         {
           tenantId: subscription().tenantId
           objectId: ownerId
