@@ -61,7 +61,7 @@ module apim 'apim.bicep' = {
   }
 }
 
-module acmebot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' = {
+module acmeBot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' = {
   name: '${resourcePrefix}-${acmeBotFunctionAppName}'
   params: {
     appNamePrefix: acmeBotFunctionAppName
