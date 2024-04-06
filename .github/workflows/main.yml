@@ -28,10 +28,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Login to Azure
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -39,12 +39,12 @@ jobs:
           enable-AzPSSession: true 
 
       - name: Deploy Infrastructure
-        uses: azure/cli@v1
+        uses: azure/cli@v2
         with: 
-          inlineScript: az deployment sub create --location '${{ secrets.LOCATION }}' --template-file $GITHUB_WORKSPACE/main.bicep --name '${{ secrets.PREFIX }}-infrastructure' --parameters githubAppId='${{ secrets.AZURE_GITHUB_ACTIONS_APP_ID }}' --parameters resourcePrefix='${{ secrets.PREFIX }}' publisherName='${{ secrets.COMPANY }}' publisherEmail='${{ secrets.EMAIL }}' ownerId='${{ secrets.OWNER_ID }}' acmeBot='${{ secrets.ACMEBOT_FUNCTION_NAME }}'
+          inlineScript: az deployment sub create --location '${{ secrets.LOCATION }}' --template-file $GITHUB_WORKSPACE/main.bicep --name '${{ secrets.PREFIX }}-infrastructure' --parameters resourcePrefix='${{ secrets.PREFIX }}' publisherName='${{ secrets.COMPANY }}' publisherEmail='${{ secrets.EMAIL }}' ownerId='${{ secrets.OWNER_ID }}' acmeBot='${{ secrets.ACMEBOT_FUNCTION_NAME }}'
 
       - name: Logout of Azure
-        uses: azure/cli@v1
+        uses: azure/cli@v2
         with: 
           inlineScript: |
             az logout
