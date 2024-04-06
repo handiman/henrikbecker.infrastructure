@@ -58,11 +58,10 @@ module apim 'apim.bicep' = {
   params: {
     publisherName: publisherName
     publisherEmail: publisherEmail
-    location: location
   }
 }
 
-module acmebot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' = {
+module acmeBot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' = {
   name: '${resourcePrefix}-${acmeBotFunctionAppName}'
   params: {
     appNamePrefix: acmeBotFunctionAppName
@@ -73,11 +72,6 @@ module acmebot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' =
   }
 }
 
-
-resource acmeBot 'Microsoft.Web/sites@2021-02-01' existing = {
-  name: acmeBotFunctionAppName
-}
-
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: vaultName
   resource vaultPolicies 'accessPolicies' = {
@@ -86,7 +80,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
       accessPolicies: [
         {
           tenantId: subscription().tenantId
-          objectId: acmeBot.identity.principalId
+          objectId: acmeBot.outputs.principalId
           permissions: {
             certificates: [
               'backup'
