@@ -3,10 +3,9 @@ param publisherEmail string
 param publisherName string
 param acmeBotFunctionAppName string
 param resourcePrefix string = resourceGroup().name
-param githubAppId string
+param location string = resourceGroup().location
 
 var vaultName = '${resourcePrefix}-vault'
-var location = resourceGroup().location
 var topicName = resourcePrefix
 
 resource topic 'Microsoft.EventGrid/topics@2021-12-01' = {
@@ -23,21 +22,29 @@ resource topic 'Microsoft.EventGrid/topics@2021-12-01' = {
 module containerRegistry 'registry.bicep' = {
   name: '${resourcePrefix}-registry'
   params: {
-	  githubAppId: githubAppId
-	  ownerId: ownerId
+    location: location
   }
 }
 
 module backendVnet 'vnet.bicep' = {
   name: '${resourcePrefix}-backend-vnet'
+  params: {
+    location: location
+  }
 }
 
 module config 'config.bicep' = {
   name: '${resourcePrefix}-config'
+  params: {
+    location: location
+  }
 }
 
 module storage 'storage.bicep' =  {
   name: '${resourcePrefix}-storage'
+  params: {
+    location: location
+  }
 }
 
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
@@ -50,8 +57,21 @@ module apim 'apim.bicep' = {
   params: {
     publisherName: publisherName
     publisherEmail: publisherEmail
+    location: location
   }
 }
+
+module acmebot 'br:cracmebotprod.azurecr.io/bicep/modules/keyvault-acmebot:v3' = {
+  name: 'acmebot'
+  params: {
+    appNamePrefix: 'acmebot'
+    mailAddress: 'spam@henrikbecker.se'
+    acmeEndpoint: 'https://acme-v02.api.letsencrypt.org/'
+    createWithKeyVault: false
+    keyVaultBaseUrl: 'https://${vaultName}${environment().suffixes.keyvaultDns}'
+  }
+}
+
 
 resource acmeBot 'Microsoft.Web/sites@2021-02-01' existing = {
   name: acmeBotFunctionAppName

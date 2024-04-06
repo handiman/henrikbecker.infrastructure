@@ -1,9 +1,10 @@
 param publisherEmail string
 param publisherName string
+param location string = 'West Europe'
 
 resource apim 'Microsoft.ApiManagement/service@2020-12-01' = {
   name: resourceGroup().name
-  location: 'West Europe'
+  location: location
   identity: {
     type: 'SystemAssigned'
   }

@@ -1,7 +1,5 @@
 param prefix string = resourceGroup().name
 param location string = resourceGroup().location
-param githubAppId string
-param ownerId string
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-06-01-preview' = {
     name: prefix

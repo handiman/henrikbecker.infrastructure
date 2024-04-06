@@ -1,5 +1,5 @@
 param zoneName string = 'henrikbecker.net'
-var location = resourceGroup().location
+param location string = resourceGroup().location
 
 resource publicIp 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
   name: '${zoneName}.ip'
@@ -18,10 +18,8 @@ resource dnsZone 'Microsoft.Network/dnsZones@2018-05-01' = {
 }
  
 resource wwwCname 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
-  name: '${zoneName}/www'
-  dependsOn: [
-    dnsZone
-  ]
+  parent: dnsZone
+  name: 'www'
   properties: {
     TTL: 3600
     CNAMERecord: {
@@ -31,10 +29,8 @@ resource wwwCname 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
 }
 
 resource sendGridEm 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
-  name: '${zoneName}/em931'
-  dependsOn: [
-    dnsZone
-  ]
+  parent: dnsZone
+  name: 'em931'
   properties: {
     TTL: 3600
     CNAMERecord: {
@@ -44,10 +40,8 @@ resource sendGridEm 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
 }
 
 resource sendGridS1 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
-  name: '${zoneName}/s1._domainkey'
-  dependsOn: [
-    dnsZone
-  ]
+  parent: dnsZone
+  name: 's1._domainkey'
   properties: {
     TTL: 3600 
     CNAMERecord: {
@@ -57,10 +51,8 @@ resource sendGridS1 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
 }
 
 resource sendGridS2 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
-  name: '${zoneName}/s2._domainkey'
-  dependsOn: [
-    dnsZone
-  ]
+  parent: dnsZone
+  name: 's2._domainkey'
   properties: {
     TTL: 3600 
     CNAMERecord: {
@@ -70,10 +62,8 @@ resource sendGridS2 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
 }
 
 resource txtRecords 'Microsoft.Network/dnsZones/TXT@2018-05-01' = {
-  name: '${zoneName}/@'
-  dependsOn: [
-    dnsZone
-  ]
+  parent: dnsZone
+  name: '@'
   properties: {
     TTL: 3600
     TXTRecords: [

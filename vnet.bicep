@@ -23,7 +23,8 @@ resource backendVnet 'Microsoft.Network/virtualnetworks@2015-05-01-preview' = {
 }
 
 resource backendVnetSubnet 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' = {
-  name: '${backendVnet.name}/default'
+  parent: backendVnet
+  name: 'default'
   properties: {
     addressPrefix: defaultSubnetAddressPrefix
     serviceEndpoints: [

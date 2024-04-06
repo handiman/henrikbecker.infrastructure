@@ -6,7 +6,6 @@ param acmeBot string
 param publisherEmail string
 param publisherName string  = 'Henrik Becker Consulting AB'
 param location string = deployment().location
-param githubAppId string
 
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourcePrefix
@@ -16,6 +15,9 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 module net 'net.bicep' = {
   name: '${resourcePrefix}-net'
   scope: rg
+  params: {
+    location:location
+  }
 }
 
 module resources 'resources.bicep' = {
@@ -27,6 +29,6 @@ module resources 'resources.bicep' = {
     publisherName: publisherName
     publisherEmail: publisherEmail
     acmeBotFunctionAppName: acmeBot
-	githubAppId: githubAppId
+    location: location
   }
 }
