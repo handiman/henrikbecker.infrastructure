@@ -11,19 +11,3 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
     publicIPAllocationMethod: 'Dynamic'
   }
 }
-
-module se 'dns.bicep' = {
-  name: 'henrikbecker.se'
-  scope: resourceGroup()
-  params: {
-    zoneName: 'henrikbecker.se'
-  }
-}
-
-module net 'dns.bicep' = {
-  name: 'henrikbecker.net'
-  scope: resourceGroup()
-  params: {
-    zoneName: 'henrikbecker.net'
-  }
-}
