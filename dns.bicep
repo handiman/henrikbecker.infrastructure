@@ -11,7 +11,7 @@ resource wwwCname 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
   properties: {
     TTL: 3600
     CNAMERecord: {
-      cname: 'handiman.github.io.'
+      cname: '${zoneName}.'
     }
   }
 }

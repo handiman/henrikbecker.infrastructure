@@ -24,6 +24,6 @@ module net 'dns.bicep' = {
   name: 'henrikbecker.net'
   scope: resourceGroup()
   params: {
-    zoneName: 'henrikbecker.se'
+    zoneName: 'henrikbecker.net'
   }
 }
