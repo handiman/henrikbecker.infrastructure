@@ -16,6 +16,7 @@ resource dnsZone 'Microsoft.Network/dnsZones@2018-05-01' = {
   name: zoneName
   location: 'global'
 }
+
  
 resource wwwCname 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
   parent: dnsZone
@@ -73,5 +74,33 @@ resource txtRecords 'Microsoft.Network/dnsZones/TXT@2018-05-01' = {
         ]
       }
     ]
+  }
+}
+
+resource dnsZoneSE 'Microsoft.Network/dnsZones@2018-05-01' = {
+  name: 'henrikbecker.se'
+  location: 'global'
+}
+
+
+resource sendGridS1SE 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
+  parent: dnsZoneSE
+  name: 's1._domainkey'
+  properties: {
+    TTL: 3600 
+    CNAMERecord: {
+      cname: 's1.domainkey.u23254236.wl237.sendgrid.net.'
+    }
+  }
+}
+
+resource sendGridS2SE 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
+  parent: dnsZoneSE
+  name: 's2._domainkey'
+  properties: {
+    TTL: 3600 
+    CNAMERecord: {
+      cname: 's2.domainkey.u23254236.wl237.sendgrid.net.'
+    }
   }
 }
